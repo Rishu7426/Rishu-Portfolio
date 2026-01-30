@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rishu Raj | Magento Developer</title>
-    <!-- Added Favicon -->
-    <link rel="icon" href="https://drive.google.com/file/d/1KBYT3Ze_QLiAHJY1ctzLL773Ig68YwcP/view?usp=drivesdk" type="image/png">
+    <!-- 
+        UPDATED FAVICON: 
+        Converted Google Drive View link to Direct Export link so the image loads correctly as an icon.
+    -->
+    <link rel="icon" href="https://drive.google.com/uc?export=view&id=1KBYT3Ze_QLiAHJY1ctzLL773Ig68YwcP" type="image/png">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -226,7 +229,12 @@
             
             <!-- DESKTOP Buttons (Hidden on Mobile) -->
             <div class="hidden md:flex flex-row justify-center gap-4">
-                <a href="https://drive.google.com/file/d/174QqS3PfdPVfwsV2V7xHGdm_UwSa62AO/view?usp=drivesdk" download class="px-8 py-3.5 rounded-full bg-magento hover:bg-orange-700 text-white font-bold text-lg transition-all transform hover:-translate-y-1 shadow-[0_0_20px_rgba(234,88,12,0.3)] flex items-center gap-2">
+                <!-- 
+                    UPDATED: Used target="_blank" so the resume opens in a new tab.
+                    Note: "download" attribute often ignored by browsers for cross-origin Drive links, 
+                    so opening in a new tab is the most reliable experience.
+                -->
+                <a href="https://drive.google.com/file/d/174QqS3PfdPVfwsV2V7xHGdm_UwSa62AO/view?usp=drivesdk" target="_blank" class="px-8 py-3.5 rounded-full bg-magento hover:bg-orange-700 text-white font-bold text-lg transition-all transform hover:-translate-y-1 shadow-[0_0_20px_rgba(234,88,12,0.3)] flex items-center gap-2">
                     <i class="fas fa-download"></i> Download Resume
                 </a>
                 <a href="#contact" class="px-8 py-3.5 rounded-full glass-card hover:bg-white/10 text-white font-semibold text-lg transition-all border border-gray-600">
@@ -243,7 +251,7 @@
             <!-- MOBILE Buttons (Round Icons, Visible on Mobile Only) -->
             <div class="flex md:hidden justify-center items-center gap-4 w-full px-4">
                 <!-- Resume -->
-                <a href="RishuM.pdf" download class="w-14 h-14 rounded-full bg-magento flex items-center justify-center text-white text-xl shadow-[0_0_15px_rgba(234,88,12,0.4)] hover:scale-110 transition-transform" aria-label="Download Resume">
+                <a href="https://drive.google.com/file/d/174QqS3PfdPVfwsV2V7xHGdm_UwSa62AO/view?usp=drivesdk" target="_blank" class="w-14 h-14 rounded-full bg-magento flex items-center justify-center text-white text-xl shadow-[0_0_15px_rgba(234,88,12,0.4)] hover:scale-110 transition-transform" aria-label="Download Resume">
                     <i class="fas fa-file-download"></i>
                 </a>
                 <!-- Email -->
