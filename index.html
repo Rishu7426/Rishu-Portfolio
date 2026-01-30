@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rishu Raj | Magento Developer</title>
+    <!-- Added Favicon -->
+    <link rel="icon" href="RishuPic.png" type="image/png">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,6 +30,7 @@
                     animation: {
                         'blob': 'blob 7s infinite',
                         'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
                         blob: {
@@ -131,6 +135,11 @@
             opacity: 1;
             transform: translateY(0);
         }
+        
+        /* Profile Image Glow */
+        .profile-glow {
+            box-shadow: 0 0 30px rgba(234, 88, 12, 0.3);
+        }
     </style>
 </head>
 <body class="antialiased overflow-x-hidden">
@@ -178,7 +187,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+    <section id="home" class="relative min-h-screen flex items-center justify-center pt-24 pb-12 overflow-hidden">
         <!-- Background Animation -->
         <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
             <div class="absolute top-0 -left-4 w-72 h-72 bg-magento rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
@@ -186,9 +195,20 @@
             <div class="absolute -bottom-8 left-20 w-72 h-72 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
         </div>
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 flex flex-col items-center">
+            
+            <!-- Profile Image -->
+            <div class="mb-8 relative group">
+                <div class="absolute -inset-1 bg-gradient-to-r from-magento to-purple-600 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+                <div class="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-slate-900 shadow-2xl">
+                    <img src="image_65fe2b.png" alt="Rishu Raj" class="w-full h-full object-cover">
+                </div>
+            </div>
+
             <div class="mb-4 inline-block px-4 py-1.5 rounded-full border border-gray-700 bg-gray-900/50 backdrop-blur-sm">
-                <span class="text-magento text-sm font-bold tracking-wide uppercase">Available for work</span>
+                <span class="text-magento text-sm font-bold tracking-wide uppercase flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Available for work
+                </span>
             </div>
             
             <h1 class="font-display text-5xl md:text-7xl font-bold mb-6 tracking-tight">
@@ -204,8 +224,12 @@
                 Specializing in Magento 2 custom modules, API integrations, and performance optimization.
             </p>
             
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#contact" class="px-8 py-3.5 rounded-full bg-magento hover:bg-orange-700 text-white font-bold text-lg transition-all transform hover:-translate-y-1 shadow-[0_0_20px_rgba(234,88,12,0.3)]">
+            <!-- DESKTOP Buttons (Hidden on Mobile) -->
+            <div class="hidden md:flex flex-row justify-center gap-4">
+                <a href="RishuM.pdf" download class="px-8 py-3.5 rounded-full bg-magento hover:bg-orange-700 text-white font-bold text-lg transition-all transform hover:-translate-y-1 shadow-[0_0_20px_rgba(234,88,12,0.3)] flex items-center gap-2">
+                    <i class="fas fa-download"></i> Download Resume
+                </a>
+                <a href="#contact" class="px-8 py-3.5 rounded-full glass-card hover:bg-white/10 text-white font-semibold text-lg transition-all border border-gray-600">
                     Contact Me
                 </a>
                 <a href="https://github.com/Rishu7426" target="_blank" class="px-8 py-3.5 rounded-full glass-card hover:bg-white/10 text-white font-semibold text-lg transition-all border border-gray-600 flex items-center justify-center gap-2">
@@ -216,8 +240,28 @@
                 </a>
             </div>
 
+            <!-- MOBILE Buttons (Round Icons, Visible on Mobile Only) -->
+            <div class="flex md:hidden justify-center items-center gap-4 w-full px-4">
+                <!-- Resume -->
+                <a href="RishuM.pdf" download class="w-14 h-14 rounded-full bg-magento flex items-center justify-center text-white text-xl shadow-[0_0_15px_rgba(234,88,12,0.4)] hover:scale-110 transition-transform" aria-label="Download Resume">
+                    <i class="fas fa-file-download"></i>
+                </a>
+                <!-- Email -->
+                <a href="mailto:rishu7478@gmail.com" class="w-14 h-14 rounded-full glass-card border border-gray-600 flex items-center justify-center text-white text-xl hover:bg-white/10 hover:border-magento hover:text-magento hover:scale-110 transition-all" aria-label="Email Me">
+                    <i class="fas fa-envelope"></i>
+                </a>
+                <!-- LinkedIn -->
+                <a href="https://linkedin.com/in/rishu-raj-072374191" target="_blank" class="w-14 h-14 rounded-full glass-card border border-gray-600 flex items-center justify-center text-white text-xl hover:bg-white/10 hover:border-blue-500 hover:text-blue-500 hover:scale-110 transition-all" aria-label="LinkedIn">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <!-- GitHub -->
+                <a href="https://github.com/Rishu7426" target="_blank" class="w-14 h-14 rounded-full glass-card border border-gray-600 flex items-center justify-center text-white text-xl hover:bg-white/10 hover:border-gray-400 hover:text-gray-400 hover:scale-110 transition-all" aria-label="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+            </div>
+
             <!-- Stats -->
-            <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-gray-800 pt-8 max-w-4xl mx-auto">
+            <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-gray-800 pt-8 w-full max-w-4xl mx-auto">
                 <div class="reveal">
                     <h3 class="text-3xl font-bold text-white">300+</h3>
                     <p class="text-gray-500 text-sm">LeetCode Problems</p>
