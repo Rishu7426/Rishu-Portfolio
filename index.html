@@ -771,12 +771,16 @@
                 case 'tictactoe':
                     title.innerText = 'Tic-Tac-Toe';
                     viewport.innerHTML = `
-                        <div class="grid grid-cols-3 gap-2 w-full max-w-[300px]" id="ttt-board">
-                            ${[...Array(9).keys()].map(i => `<div onclick="handleTTT(${i})" class="game-grid-cell" id="ttt-${i}"></div>`).join('')}
+                        <div class="w-full max-w-[300px]">
+                            <div id="ttt-status" class="text-center text-sm font-bold text-gray-400 mb-4 uppercase tracking-widest">Your Turn (X)</div>
+                            <div class="grid grid-cols-3 gap-2" id="ttt-board">
+                                ${[...Array(9).keys()].map(i => `<div onclick="handleTTT(${i})" class="game-grid-cell" id="ttt-${i}"></div>`).join('')}
+                            </div>
                         </div>
                     `;
                     window.tttState = Array(9).fill(null);
                     window.tttTurn = 'X';
+                    window.tttActive = true;
                     break;
 
                 case 'whack':
@@ -829,23 +833,64 @@
             }
         }
 
-        // Tic Tac Toe Handler
+        // Tic Tac Toe Handler with AI
         function handleTTT(i) {
-            if(window.tttState[i] || checkTTTWinner()) return;
-            window.tttState[i] = window.tttTurn;
-            document.getElementById(`ttt-${i}`).innerText = window.tttTurn;
-            document.getElementById(`ttt-${i}`).style.color = window.tttTurn === 'X' ? '#ea580c' : '#38bdf8';
+            if(!window.tttActive || window.tttState[i] || window.tttTurn !== 'X') return;
             
-            if(checkTTTWinner()) {
-                setTimeout(() => alert(`${window.tttTurn} Wins!`), 10);
-                return;
+            makeTTTMove(i, 'X');
+            
+            if(window.tttActive) {
+                document.getElementById('ttt-status').innerText = "AI Thinking...";
+                setTimeout(makeAIMove, 600);
             }
-            window.tttTurn = window.tttTurn === 'X' ? 'O' : 'X';
+        }
+
+        function makeTTTMove(i, player) {
+            window.tttState[i] = player;
+            const el = document.getElementById(`ttt-${i}`);
+            el.innerText = player;
+            el.style.color = player === 'X' ? '#ea580c' : '#38bdf8';
+            
+            const winner = checkTTTWinner();
+            if(winner) {
+                window.tttActive = false;
+                document.getElementById('ttt-status').innerText = winner === 'Draw' ? "It's a Draw!" : (winner === 'X' ? "You Win!" : "AI Wins!");
+                document.getElementById('ttt-status').classList.add(winner === 'X' ? 'text-green-500' : 'text-magento');
+            } else {
+                window.tttTurn = player === 'X' ? 'O' : 'X';
+                document.getElementById('ttt-status').innerText = window.tttTurn === 'X' ? "Your Turn (X)" : "AI Thinking...";
+            }
+        }
+
+        function makeAIMove() {
+            if(!window.tttActive) return;
+            
+            const available = window.tttState.map((v, i) => v === null ? i : null).filter(v => v !== null);
+            if(available.length === 0) return;
+
+            // Strategy: 1. Win if possible, 2. Block if necessary, 3. Random
+            const winLines = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+            
+            const findBestIdx = (p) => {
+                for(let line of winLines) {
+                    const vals = line.map(idx => window.tttState[idx]);
+                    if(vals.filter(v => v === p).length === 2 && vals.filter(v => v === null).length === 1) {
+                        return line[vals.indexOf(null)];
+                    }
+                }
+                return null;
+            };
+
+            let aiIdx = findBestIdx('O') ?? findBestIdx('X') ?? available[Math.floor(Math.random() * available.length)];
+            makeTTTMove(aiIdx, 'O');
         }
 
         function checkTTTWinner() {
             const lines = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-            return lines.find(([a,b,c]) => window.tttState[a] && window.tttState[a] === window.tttState[b] && window.tttState[a] === window.tttState[c]);
+            for(let [a,b,c] of lines) {
+                if(window.tttState[a] && window.tttState[a] === window.tttState[b] && window.tttState[a] === window.tttState[c]) return window.tttState[a];
+            }
+            return window.tttState.includes(null) ? null : 'Draw';
         }
 
         // Snake Game Logic
