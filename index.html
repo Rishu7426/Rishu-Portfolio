@@ -1,240 +1,386 @@
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rishu Raj | Magento & AWS Developer</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { Mail, Phone, MapPin, Linkedin, Github, ChevronRight, ChevronLeft, Terminal, Server, Globe, Cpu, Award } from 'lucide-react';
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Outfit', 'sans-serif'],
-                        display: ['Space Grotesk', 'sans-serif'],
-                    },
-                    colors: {
-                        magento: '#ea580c',
-                        primary: '#0f172a',
-                        secondary: '#1e293b',
-                        accent: '#6366f1',
-                    }
-                }
-            }
+/**
+ * RISHU RAJ - MAGENTO 2 DEVELOPER PORTFOLIO
+ * Optimized Cyberpunk HUD Layout
+ */
+
+const PORTFOLIO_DATA = {
+  profile: {
+    name: "Rishu Raj",
+    role: "Magento 2 Developer",
+    tagline: "Building scalable, high-performance eCommerce solutions",
+    location: "Bangalore, India",
+    contact: {
+      phone: "+91 7426033178",
+      email: "rishu7478@gmail.com",
+      linkedin: "linkedin.com/in/rishu-raj-072374191",
+      github: "github.com/Rishu7426"
+    }
+  },
+  skills: [
+    { category: "Magento Expertise", items: ["Magento 2.4", "Custom Module Development", "Hyvä Themes", "Luma Theme", "B2B & B2C Stores", "Magento CLI"] },
+    { category: "Backend", items: ["PHP 7/8", "MySQL", "REST APIs", "GraphQL", "Payment Gateway Integration", "Cron Jobs"] },
+    { category: "Frontend", items: ["HTML5", "CSS3", "JavaScript", "Tailwind CSS", "XML", "UI/UX Optimization"] },
+    { category: "Cloud & DevOps", items: ["AWS EC2", "Linux (Ubuntu)", "Docker", "Git", "Composer", "Server Deployment"] }
+  ],
+  experience: [
+    {
+      company: "Brady Company India Pvt. Ltd.",
+      role: "Magento 2 Developer",
+      period: "2025 - Present",
+      projects: [
+        {
+          name: "pdchealthcare.com",
+          type: "B2C eCommerce Platform",
+          desc: "Developed and maintained a large-scale Magento 2 store. Implemented Hyvä and Luma themes, created custom modules, integrated payment gateways, optimized performance and handled production deployments on AWS.",
+          tech: "Magento 2.4, PHP, MySQL, Hyvä, AWS"
+        },
+        {
+          name: "bradywarehouse.com",
+          type: "B2B eCommerce Platform",
+          desc: "Implemented Magento B2B features including company accounts, tier pricing, customer groups, role-based permissions and REST API integrations.",
+          tech: "Magento 2 B2B, PHP, REST APIs, MySQL"
         }
-    </script>
+      ]
+    },
+    {
+      company: "Freelance / Contract",
+      role: "Web Developer",
+      period: "2024 - 2025",
+      projects: [
+        {
+          name: "pdcorp.com",
+          type: "Corporate Website",
+          desc: "Built and customized WordPress website, improved performance, implemented security best practices and SEO optimizations.",
+          tech: "WordPress, PHP, MySQL"
+        }
+      ]
+    }
+  ],
+  education: {
+    degree: "Bachelor of Engineering (Civil)",
+    college: "Government Engineering College, West Champaran",
+    period: "2020 - 2024"
+  },
+  achievements: [
+    "Sprint Champion – Brady Company (Sept 2025)",
+    "Solved 300+ coding problems on LeetCode & HackerRank",
+    "Full Stack Development Certification – JSpiders",
+    "Successfully delivered multiple production Magento stores"
+  ]
+};
 
-    <style>
-        body { background-color: #0f172a; color: #f1f5f9; }
-        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .glass-nav { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-        .text-gradient { background: linear-gradient(to right, #ea580c, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-    </style>
-</head>
-<body class="antialiased overflow-x-hidden">
+// --- Sub-components ---
 
-    <!-- Navbar -->
-    <nav class="fixed w-full z-50 glass-nav transition-all duration-300" id="navbar">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <div class="flex-shrink-0 cursor-pointer" onclick="window.scrollTo(0,0)">
-                    <span class="font-display font-bold text-2xl tracking-tighter">
-                        <span class="text-magento">R</span>ishu<span class="text-accent">.</span>
-                    </span>
-                </div>
-                
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#about" class="text-sm font-medium hover:text-magento transition-colors">About</a>
-                    <a href="#experience" class="text-sm font-medium hover:text-magento transition-colors">Experience</a>
-                    <a href="#skills" class="text-sm font-medium hover:text-magento transition-colors">Skills</a>
-                    <a href="#projects" class="text-sm font-medium hover:text-magento transition-colors">Projects</a>
-                    <a href="#" class="flex items-center gap-2 px-5 py-2 text-sm font-bold text-white bg-indigo-600 rounded-full hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-500/20">
-                        <i class="fas fa-download"></i> Resume
-                    </a>
-                </div>
+const GlitchText = ({ text, className = "", hover = false }) => (
+  <div className={`relative inline-block group ${className}`}>
+    <span className="relative z-10">{text}</span>
+    {hover && (
+      <>
+        <span className="absolute top-0 left-0 -ml-0.5 translate-x-[2px] text-red-500 opacity-0 group-hover:opacity-70 mix-blend-screen animate-pulse">{text}</span>
+        <span className="absolute top-0 left-0 -ml-0.5 -translate-x-[2px] text-cyan-500 opacity-0 group-hover:opacity-70 mix-blend-screen animate-pulse delay-75">{text}</span>
+      </>
+    )}
+  </div>
+);
 
-                <!-- Mobile Action Buttons -->
-                <div class="flex md:hidden items-center gap-3">
-                    <a href="https://github.com/Rishu7426" target="_blank" class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-800 text-slate-200 border border-slate-700">
-                        <i class="fab fa-github"></i>
-                    </a>
-                    <a href="mailto:rishu7478@gmail.com" class="w-10 h-10 flex items-center justify-center rounded-full bg-magento text-white">
-                        <i class="fas fa-envelope"></i>
-                    </a>
-                    <button type="button" id="mobile-menu-btn" class="p-2 text-gray-400">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-                </div>
+const ParticleBackground = () => {
+  const canvasRef = useRef(null);
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let animationFrameId;
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedX = (Math.random() - 0.5) * 0.4;
+        this.speedY = (Math.random() - 0.5) * 0.4;
+        this.opacity = Math.random() * 0.5;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+      }
+      draw() {
+        ctx.fillStyle = `rgba(45, 212, 191, ${this.opacity})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < 100; i++) particles.push(new Particle());
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => { p.update(); p.draw(); });
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    window.addEventListener('resize', resize);
+    resize();
+    animate();
+    return () => {
+      window.removeEventListener('resize', resize);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+  return <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full pointer-events-none z-0 opacity-40" />;
+};
+
+const NavItem = ({ label, active, onClick, index }) => (
+  <button 
+    onClick={onClick}
+    className={`group flex items-center justify-between w-full text-left py-4 px-5 mb-3 transition-all duration-500 border-l-2 relative overflow-hidden ${
+      active ? 'border-teal-400 bg-teal-400/5' : 'border-white/5 hover:border-teal-500/30 hover:bg-white/5'
+    }`}
+  >
+    <div className={`absolute inset-0 bg-gradient-to-r from-teal-500/10 to-transparent transition-transform duration-700 origin-left ${active ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`} />
+    <div className="flex items-center space-x-4 relative z-10">
+      <span className={`font-mono text-[10px] tracking-widest ${active ? 'text-teal-400' : 'text-gray-600 group-hover:text-teal-500'}`}>0{index + 1}</span>
+      <span className={`text-sm font-bold tracking-widest font-mono uppercase ${active ? 'text-white' : 'text-gray-400 group-hover:text-white'}`}>{label}</span>
+    </div>
+    {active && <div className="w-1.5 h-1.5 bg-teal-400 rounded-full shadow-[0_0_10px_#2dd4bf] relative z-10" />}
+  </button>
+);
+
+const SectionCard = ({ title, subtitle, children, isActive }) => (
+  <div className={`absolute inset-0 transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] transform ${isActive ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-12 scale-95 pointer-events-none'}`}>
+    <div className="w-full h-full bg-black/60 backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl flex flex-col overflow-hidden">
+      <div className="absolute top-6 left-6 w-4 h-4 border-t border-l border-teal-500/40" />
+      <div className="absolute bottom-6 right-6 w-4 h-4 border-b border-r border-teal-500/40" />
+      
+      <div className="mb-8">
+        <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-2 uppercase">{title}</h2>
+        <div className="flex items-center space-x-3">
+          <div className="h-px w-8 bg-teal-500" />
+          <p className="text-teal-400 font-mono text-xs uppercase tracking-[0.3em]">{subtitle}</p>
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-6">
+        {children}
+      </div>
+    </div>
+  </div>
+);
+
+// --- Main App ---
+
+export default function App() {
+  const [activeTab, setActiveTab] = useState('home');
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => { setIsLoaded(true); }, []);
+
+  const menuItems = [
+    { id: 'home', label: 'Identity' },
+    { id: 'work', label: 'Experience' },
+    { id: 'skills', label: 'Tech Stack' },
+    { id: 'about', label: 'About / Edu' },
+    { id: 'contact', label: 'Contact' }
+  ];
+
+  if (!isLoaded) return <div className="bg-black h-screen w-screen flex items-center justify-center text-teal-500 font-mono animate-pulse">BOOTING SYSTEM...</div>;
+
+  return (
+    <div className="min-h-screen w-full bg-[#030303] text-white selection:bg-teal-500/40 relative flex items-center justify-center p-4 md:p-10 font-sans overflow-hidden">
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .custom-scrollbar::-webkit-scrollbar { width: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(45, 212, 191, 0.2); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(45, 212, 191, 0.5); }
+      `}</style>
+
+      <ParticleBackground />
+
+      {/* --- HUD FRAME --- */}
+      <div className="relative z-10 w-full max-w-7xl h-full max-h-[900px] grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        
+        {/* LEFT NAV PANEL */}
+        <div className="lg:col-span-3 flex flex-col justify-center space-y-8">
+          <div className="pl-4 border-l border-white/10">
+            <h1 className="text-2xl font-black tracking-tighter text-white mb-1"><GlitchText text="SYSTEM_LINK" hover /></h1>
+            <p className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Version 2.4.0_M2</p>
+          </div>
+          
+          <nav className="flex flex-col">
+            {menuItems.map((item, i) => (
+              <NavItem key={item.id} {...item} index={i} active={activeTab === item.id} onClick={() => setActiveTab(item.id)} />
+            ))}
+          </nav>
+
+          <div className="p-5 bg-white/5 border border-white/5 rounded-2xl">
+            <div className="flex items-center space-x-3 mb-3">
+              <Terminal size={14} className="text-teal-400" />
+              <span className="text-[10px] font-mono text-gray-400 tracking-widest uppercase">Current Status</span>
             </div>
+            <div className="space-y-1">
+              <div className="flex justify-between text-[10px] font-mono uppercase">
+                <span className="text-gray-600">Availability</span>
+                <span className="text-teal-500">Active</span>
+              </div>
+              <div className="flex justify-between text-[10px] font-mono uppercase">
+                <span className="text-gray-600">Sector</span>
+                <span className="text-teal-500">Magento_Dev</span>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="md:hidden hidden bg-slate-900 border-b border-gray-800" id="mobile-menu">
-            <div class="px-4 pt-2 pb-6 space-y-4">
-                <a href="#about" class="block py-2 text-base font-medium">About</a>
-                <a href="#experience" class="block py-2 text-base font-medium">Experience</a>
-                <a href="#skills" class="block py-2 text-base font-medium">Skills</a>
-                <a href="#projects" class="block py-2 text-base font-medium">Projects</a>
-                <a href="#" class="flex items-center justify-center gap-2 w-full py-3 bg-indigo-600 text-white rounded-xl font-bold">
-                    <i class="fas fa-download"></i> Download Resume
+        {/* RIGHT CONTENT PANEL */}
+        <div className="lg:col-span-9 relative h-[600px] lg:h-auto min-h-[500px]">
+          
+          {/* IDENTITY */}
+          <SectionCard title="Identity" subtitle="Core User Profile" isActive={activeTab === 'home'}>
+            <div className="space-y-8 py-4">
+              <div className="bg-gradient-to-br from-teal-500/10 to-transparent p-8 rounded-3xl border border-teal-500/10">
+                <h3 className="text-5xl md:text-7xl font-black mb-4 tracking-tighter"><GlitchText text={PORTFOLIO_DATA.profile.name} hover /></h3>
+                <p className="text-xl text-teal-400 font-mono mb-6 uppercase tracking-widest">{PORTFOLIO_DATA.profile.role}</p>
+                <p className="text-gray-400 text-lg max-w-2xl leading-relaxed">{PORTFOLIO_DATA.profile.tagline}. Specialized in building robust B2B and B2C architectures.</p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex items-center space-x-4 bg-white/5 p-4 rounded-2xl border border-white/5">
+                  <MapPin className="text-teal-500" size={20} />
+                  <div>
+                    <p className="text-[10px] font-mono text-gray-500 uppercase">Location</p>
+                    <p className="text-sm font-bold">{PORTFOLIO_DATA.profile.location}</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-4 bg-white/5 p-4 rounded-2xl border border-white/5">
+                  <Award className="text-teal-500" size={20} />
+                  <div>
+                    <p className="text-[10px] font-mono text-gray-500 uppercase">Expertise</p>
+                    <p className="text-sm font-bold">Magento Architecture</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </SectionCard>
+
+          {/* EXPERIENCE */}
+          <SectionCard title="Experience" subtitle="Deployment Records" isActive={activeTab === 'work'}>
+            <div className="space-y-10 py-4">
+              {PORTFOLIO_DATA.experience.map((job, idx) => (
+                <div key={idx} className="relative pl-8 border-l border-teal-500/20">
+                  <div className="absolute left-[-5px] top-0 w-2 h-2 rounded-full bg-teal-500 shadow-[0_0_10px_#2dd4bf]" />
+                  <div className="flex flex-col md:flex-row md:justify-between items-start mb-6">
+                    <div>
+                      <h4 className="text-2xl font-bold text-white">{job.role}</h4>
+                      <p className="text-teal-400 font-mono text-sm tracking-wider uppercase">{job.company}</p>
+                    </div>
+                    <span className="text-[10px] font-mono bg-white/5 border border-white/10 px-3 py-1 rounded-full text-gray-400 mt-2 md:mt-0">{job.period}</span>
+                  </div>
+                  <div className="grid grid-cols-1 gap-6">
+                    {job.projects.map((proj, pIdx) => (
+                      <div key={pIdx} className="bg-white/5 p-6 rounded-2xl border border-white/5 hover:border-teal-500/20 transition-all">
+                        <div className="flex justify-between items-start mb-3">
+                          <h5 className="font-bold text-white flex items-center group cursor-pointer">
+                            {proj.name} <Globe size={14} className="ml-2 text-teal-500/50 group-hover:text-teal-500 transition-colors" />
+                          </h5>
+                          <span className="text-[9px] font-mono uppercase text-teal-400 border border-teal-500/20 px-2 py-0.5 rounded">{proj.type}</span>
+                        </div>
+                        <p className="text-sm text-gray-400 mb-4 leading-relaxed">{proj.desc}</p>
+                        <div className="flex flex-wrap gap-2">
+                          {proj.tech.split(', ').map(t => (
+                            <span key={t} className="text-[9px] font-mono bg-black px-2 py-1 rounded border border-white/10 text-gray-500 uppercase tracking-tighter">{t}</span>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </SectionCard>
+
+          {/* TECH STACK */}
+          <SectionCard title="Stack" subtitle="Module Repository" isActive={activeTab === 'skills'}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-4">
+              {PORTFOLIO_DATA.skills.map((group, idx) => (
+                <div key={idx} className="bg-white/5 border border-white/5 p-6 rounded-3xl group hover:border-teal-500/20 transition-all">
+                  <div className="flex items-center space-x-3 mb-6">
+                    <Cpu size={18} className="text-teal-500" />
+                    <h4 className="text-sm font-mono font-bold uppercase tracking-[0.2em]">{group.category}</h4>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {group.items.map(item => (
+                      <span key={item} className="text-xs bg-black/40 border border-white/5 px-3 py-2 rounded-xl text-gray-400 hover:text-white hover:border-teal-400/30 transition-all">
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </SectionCard>
+
+          {/* ABOUT / EDU */}
+          <SectionCard title="History" subtitle="Educational Log" isActive={activeTab === 'about'}>
+            <div className="space-y-8 py-4">
+              <div className="bg-white/5 p-8 rounded-3xl border border-white/5">
+                <div className="flex items-center space-x-4 mb-6">
+                  <Server className="text-teal-500" />
+                  <h4 className="text-xl font-bold uppercase tracking-widest">Academic Base</h4>
+                </div>
+                <h5 className="text-2xl font-bold text-white mb-2">{PORTFOLIO_DATA.education.degree}</h5>
+                <p className="text-teal-400 font-mono text-sm mb-4">{PORTFOLIO_DATA.education.college}</p>
+                <p className="text-xs text-gray-500 font-mono tracking-widest uppercase">{PORTFOLIO_DATA.education.period}</p>
+              </div>
+              <div className="grid grid-cols-1 gap-4">
+                <h4 className="text-xs font-mono text-gray-600 uppercase tracking-widest mb-2 px-2">Certificates & Intel</h4>
+                {PORTFOLIO_DATA.achievements.map((item, i) => (
+                  <div key={i} className="flex items-center space-x-4 bg-white/5 p-4 rounded-2xl border border-white/5 group hover:bg-teal-500/5 transition-colors">
+                    <div className="w-8 h-8 rounded-full bg-teal-500/10 flex items-center justify-center text-teal-400 font-mono text-xs group-hover:bg-teal-500 group-hover:text-black transition-all">0{i+1}</div>
+                    <p className="text-sm text-gray-300">{item}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </SectionCard>
+
+          {/* CONTACT */}
+          <SectionCard title="Connect" subtitle="Channel Frequencies" isActive={activeTab === 'contact'}>
+            <div className="h-full flex flex-col justify-center space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <a href={`mailto:${PORTFOLIO_DATA.profile.contact.email}`} className="group bg-white/5 border border-white/5 p-8 rounded-3xl hover:border-teal-500/30 transition-all text-center flex flex-col items-center">
+                  <div className="w-14 h-14 bg-teal-500/10 rounded-full flex items-center justify-center text-teal-400 mb-4 group-hover:scale-110 transition-transform"><Mail size={24} /></div>
+                  <span className="text-xs font-mono text-gray-500 uppercase tracking-widest mb-1">Email Link</span>
+                  <span className="text-lg font-bold">{PORTFOLIO_DATA.profile.contact.email}</span>
                 </a>
+                <a href={`tel:${PORTFOLIO_DATA.profile.contact.phone}`} className="group bg-white/5 border border-white/5 p-8 rounded-3xl hover:border-teal-500/30 transition-all text-center flex flex-col items-center">
+                  <div className="w-14 h-14 bg-teal-500/10 rounded-full flex items-center justify-center text-teal-400 mb-4 group-hover:scale-110 transition-transform"><Phone size={24} /></div>
+                  <span className="text-xs font-mono text-gray-500 uppercase tracking-widest mb-1">Comms Link</span>
+                  <span className="text-lg font-bold">{PORTFOLIO_DATA.profile.contact.phone}</span>
+                </a>
+              </div>
+              <div className="flex justify-center space-x-4 pt-4">
+                <a href={`https://${PORTFOLIO_DATA.profile.contact.linkedin}`} target="_blank" className="bg-white text-black p-4 rounded-2xl hover:bg-teal-400 transition-colors"><Linkedin size={24} /></a>
+                <a href={`https://${PORTFOLIO_DATA.profile.contact.github}`} target="_blank" className="bg-white/5 border border-white/10 p-4 rounded-2xl hover:text-teal-400 transition-colors"><Github size={24} /></a>
+              </div>
             </div>
+          </SectionCard>
+
         </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section id="home" class="relative min-h-screen flex items-center pt-24 pb-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-12 items-center">
-            <div class="text-left">
-                <div class="mb-6 inline-flex items-center gap-2 px-3 py-1 rounded-full border border-orange-500/20 bg-orange-500/10">
-                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                    <span class="text-magento text-xs font-bold uppercase tracking-widest">Sprint Champion 2025</span>
-                </div>
-                <h1 class="font-display text-5xl md:text-7xl font-bold mb-6 leading-tight">
-                    Architecting <span class="text-gradient">Commerce</span> Excellence.
-                </h1>
-                <p class="text-gray-400 text-lg mb-8 leading-relaxed max-w-lg">
-                    I build high-performance, scalable B2B/B2C platforms using **Magento 2.4**, **Hyvä**, and **AWS**. Civil Engineer turned Backend Architect with a passion for clean code and problem solving.
-                </p>
-                <div class="flex flex-wrap gap-4">
-                    <a href="#" class="px-8 py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold transition-all shadow-xl shadow-indigo-500/20 flex items-center gap-2">
-                        <i class="fas fa-file-download"></i> Download Resume
-                    </a>
-                    <a href="https://linkedin.com/in/rishu-raj-072374191" target="_blank" class="px-8 py-4 rounded-2xl glass-card border-gray-700 hover:bg-white/5 text-white font-bold transition-all">
-                        Let's Connect
-                    </a>
-                </div>
-                <div class="mt-10 flex items-center gap-6 grayscale opacity-50">
-                    <div class="flex flex-col"><span class="text-2xl font-bold text-white">300+</span><span class="text-[10px] uppercase tracking-wider">LeetCode Solved</span></div>
-                    <div class="h-8 w-px bg-slate-800"></div>
-                    <div class="flex flex-col"><span class="text-2xl font-bold text-white">M2.4</span><span class="text-[10px] uppercase tracking-wider">Adobe Commerce</span></div>
-                </div>
-            </div>
-
-            <!-- Stats/Tech Cards -->
-            <div class="relative hidden md:block reveal">
-                <div class="glass-card p-8 rounded-3xl border-slate-700 shadow-2xl relative z-10">
-                    <div class="space-y-6">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-magento/20 rounded-xl flex items-center justify-center text-magento font-bold">Hy</div>
-                            <div>
-                                <h4 class="font-bold">Hyvä Theme Specialist</h4>
-                                <p class="text-xs text-gray-500">Performance-first frontend builds</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-indigo-500/20 rounded-xl flex items-center justify-center text-indigo-400"><i class="fas fa-cloud"></i></div>
-                            <div>
-                                <h4 class="font-bold">AWS Certified Approach</h4>
-                                <p class="text-xs text-gray-500">Scalable cloud infrastructure</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-400"><i class="fas fa-code-branch"></i></div>
-                            <div>
-                                <h4 class="font-bold">B2B Extension Dev</h4>
-                                <p class="text-xs text-gray-500">Complex pricing & inventory logic</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Experience -->
-    <section id="experience" class="py-20 bg-slate-900/30">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="font-display text-3xl font-bold mb-12 text-center">Professional <span class="text-magento">Journey</span></h2>
-            <div class="space-y-12 border-l-2 border-slate-800 ml-4">
-                <div class="relative pl-8 reveal">
-                    <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-magento border-4 border-slate-900"></div>
-                    <div class="flex flex-wrap justify-between items-center mb-2">
-                        <h4 class="text-xl font-bold text-white">Magento Developer</h4>
-                        <span class="text-xs font-bold text-magento uppercase bg-magento/10 px-2 py-0.5 rounded">2025 - Present</span>
-                    </div>
-                    <p class="text-gray-400 font-medium mb-4">Brady Company India Pvt. Ltd. | Bangalore</p>
-                    <ul class="text-sm text-gray-400 space-y-3">
-                        <li class="flex gap-2"><i class="fas fa-check text-magento mt-1"></i> <span>Developed custom B2B modules for **bradywarehouse.com** including complex checkout rules.</span></li>
-                        <li class="flex gap-2"><i class="fas fa-check text-magento mt-1"></i> <span>Optimized **pdchealthcare.com** (B2C) using Luma and REST API integrations.</span></li>
-                        <li class="flex gap-2"><i class="fas fa-check text-magento mt-1"></i> <span>Recognized as **Sprint Champion** for high-impact feature delivery in Sep 2025.</span></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects -->
-    <section id="projects" class="py-20 px-4">
-        <div class="max-w-7xl mx-auto">
-            <h2 class="font-display text-4xl font-bold mb-16 text-center italic">Key <span class="text-gradient">Ecosystems</span></h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Bradywarehouse -->
-                <div class="glass-card p-6 rounded-3xl hover:-translate-y-2 transition-all group">
-                    <div class="mb-4 text-accent"><i class="fas fa-warehouse text-3xl"></i></div>
-                    <h3 class="font-bold mb-2">bradywarehouse.com</h3>
-                    <p class="text-xs text-gray-500 mb-4">M2.4 B2B platform using Hyvä for high-speed industrial commerce.</p>
-                    <div class="flex flex-wrap gap-2"><span class="text-[10px] px-2 py-0.5 bg-slate-900 rounded">Hyvä</span><span class="text-[10px] px-2 py-0.5 bg-slate-900 rounded">PHP 8.x</span></div>
-                </div>
-                <!-- PDC Healthcare -->
-                <div class="glass-card p-6 rounded-3xl hover:-translate-y-2 transition-all group">
-                    <div class="mb-4 text-magento"><i class="fas fa-hospital text-3xl"></i></div>
-                    <h3 class="font-bold mb-2">pdchealthcare.com</h3>
-                    <p class="text-xs text-gray-500 mb-4">B2C Adobe Commerce store with deep shipping and payment integrations.</p>
-                    <div class="flex flex-wrap gap-2"><span class="text-[10px] px-2 py-0.5 bg-slate-900 rounded">Luma</span><span class="text-[10px] px-2 py-0.5 bg-slate-900 rounded">REST API</span></div>
-                </div>
-                <!-- BradyPeopleID -->
-                <div class="glass-card p-6 rounded-3xl hover:-translate-y-2 transition-all group">
-                    <div class="mb-4 text-blue-400"><i class="fas fa-id-card text-3xl"></i></div>
-                    <h3 class="font-bold mb-2">bradypeopleid.com</h3>
-                    <p class="text-xs text-gray-500 mb-4">Maintenance and feature enhancements for enterprise corporate commerce.</p>
-                    <div class="flex flex-wrap gap-2"><span class="text-[10px] px-2 py-0.5 bg-slate-900 rounded">WordPress</span><span class="text-[10px] px-2 py-0.5 bg-slate-900 rounded">PHP</span></div>
-                </div>
-                <!-- pdcorp -->
-                <div class="glass-card p-6 rounded-3xl hover:-translate-y-2 transition-all group">
-                    <div class="mb-4 text-purple-400"><i class="fas fa-globe text-3xl"></i></div>
-                    <h3 class="font-bold mb-2">pdcorp.com</h3>
-                    <p class="text-xs text-gray-500 mb-4">Full-cycle corporate site optimization and security management.</p>
-                    <div class="flex flex-wrap gap-2"><span class="text-[10px] px-2 py-0.5 bg-slate-900 rounded">WordPress</span><span class="text-[10px] px-2 py-0.5 bg-slate-900 rounded">Security</span></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="py-20 border-t border-slate-800 text-center">
-        <div class="max-w-2xl mx-auto px-4">
-            <h2 class="text-2xl font-bold mb-6 italic">From Civil Engineering to <span class="text-gradient">Backend Architecture</span>.</h2>
-            <p class="text-sm text-gray-500 mb-10">Currently scaling commerce at Brady Company | Whitefield, Bangalore</p>
-            <div class="flex justify-center gap-6">
-                <a href="mailto:rishu7478@gmail.com" class="w-12 h-12 rounded-full glass-card flex items-center justify-center hover:bg-magento hover:text-white transition-all"><i class="fas fa-envelope"></i></a>
-                <a href="https://linkedin.com/in/rishu-raj-072374191" target="_blank" class="w-12 h-12 rounded-full glass-card flex items-center justify-center hover:bg-indigo-600 hover:text-white transition-all"><i class="fab fa-linkedin"></i></a>
-                <a href="https://github.com/Rishu7426" target="_blank" class="w-12 h-12 rounded-full glass-card flex items-center justify-center hover:bg-white hover:text-slate-900 transition-all"><i class="fab fa-github"></i></a>
-            </div>
-            <p class="mt-12 text-[10px] text-gray-700 uppercase tracking-widest">&copy; 2025 Rishu Raj | Government Engineering College Graduate</p>
-        </div>
-    </footer>
-
-    <script>
-        function handleReveal() {
-            const reveals = document.querySelectorAll(".reveal");
-            reveals.forEach(el => {
-                const elementTop = el.getBoundingClientRect().top;
-                if (elementTop < window.innerHeight - 50) el.classList.add("active");
-            });
-        }
-        const btn = document.getElementById('mobile-menu-btn');
-        const menu = document.getElementById('mobile-menu');
-        btn.addEventListener('click', () => menu.classList.toggle('hidden'));
-        window.onload = handleReveal;
-        window.addEventListener("scroll", handleReveal);
-    </script>
-</body>
-</html>
+      </div>
+    </div>
+  );
+}
