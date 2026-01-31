@@ -34,6 +34,7 @@
                         'blob': 'blob 7s infinite',
                         'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
                         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'shake': 'shake 0.3s ease-in-out',
                     },
                     keyframes: {
                         blob: {
@@ -45,6 +46,11 @@
                         fadeInUp: {
                             '0%': { opacity: '0', transform: 'translateY(20px)' },
                             '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        shake: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '25%': { transform: 'translateX(-5px) rotate(-5deg)' },
+                            '75%': { transform: 'translateX(5px) rotate(5deg)' },
                         }
                     }
                 }
@@ -174,10 +180,48 @@
             cursor: pointer;
             border: 2px solid transparent;
             transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
         .paint-swatch.active {
             border-color: white;
             transform: scale(1.1);
+        }
+
+        /* Custom color input styling */
+        .color-picker-wrapper {
+            width: 24px;
+            height: 24px;
+            border-radius: 99px;
+            position: relative;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);
+        }
+        .color-picker-wrapper input {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0; cursor: pointer;
+        }
+
+        /* Bug Specific Animation */
+        .bug-crying {
+            animation: shake 0.3s ease-in-out infinite;
+        }
+        .reaction-bubble {
+            position: absolute;
+            top: -20px;
+            font-size: 10px;
+            font-weight: bold;
+            color: #ea580c;
+            pointer-events: none;
+            animation: fadeUp 1s forwards;
+        }
+        @keyframes fadeUp {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-30px); }
         }
     </style>
 </head>
@@ -229,7 +273,6 @@
 
     <!-- Hero Section -->
     <section id="home" class="relative min-h-screen flex items-center justify-center pt-24 pb-12 overflow-hidden">
-        <!-- Background Animation -->
         <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
             <div class="absolute top-0 -left-4 w-72 h-72 bg-magento rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
             <div class="absolute top-0 -right-4 w-72 h-72 bg-accent rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
@@ -238,7 +281,6 @@
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 flex flex-col items-center">
             
-            <!-- Profile Image -->
             <div class="mb-8 relative group">
                 <div class="absolute -inset-1 bg-gradient-to-r from-magento to-purple-600 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
                 <div class="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-slate-900 shadow-2xl">
@@ -265,7 +307,6 @@
                 Specializing in Magento 2 custom modules, API integrations, and performance optimization.
             </p>
             
-            <!-- DESKTOP Buttons (Hidden on Mobile) -->
             <div class="hidden md:flex flex-row justify-center gap-4">
                 <a href="https://drive.google.com/file/d/174QqS3PfdPVfwsV2V7xHGdm_UwSa62AO/view?usp=drivesdk" target="_blank" class="px-8 py-3.5 rounded-full bg-magento hover:bg-orange-700 text-white font-bold text-lg transition-all transform hover:-translate-y-1 shadow-[0_0_20px_rgba(234,88,12,0.3)] flex items-center gap-2">
                     <i class="fas fa-download"></i> Download Resume
@@ -281,7 +322,6 @@
                 </a>
             </div>
 
-            <!-- MOBILE Buttons (Round Icons, Visible on Mobile Only) -->
             <div class="flex md:hidden justify-center items-center gap-4 w-full px-4">
                 <a href="https://drive.google.com/file/d/174QqS3PfdPVfwsV2V7xHGdm_UwSa62AO/view?usp=drivesdk" target="_blank" class="w-14 h-14 rounded-full bg-magento flex items-center justify-center text-white text-xl shadow-[0_0_15px_rgba(234,88,12,0.4)] hover:scale-110 transition-transform" aria-label="Download Resume">
                     <i class="fas fa-file-download"></i>
@@ -297,7 +337,6 @@
                 </a>
             </div>
 
-            <!-- Stats -->
             <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-gray-800 pt-8 w-full max-w-4xl mx-auto">
                 <div class="reveal">
                     <h3 class="text-3xl font-bold text-white">300+</h3>
@@ -323,8 +362,6 @@
     <section id="about" class="py-20 bg-slate-900/50 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-                
-                <!-- About Content -->
                 <div class="reveal">
                     <h2 class="font-display text-3xl md:text-4xl font-bold mb-6">
                         Architecting <span class="text-gradient-blue">Digital Commerce</span>
@@ -335,7 +372,6 @@
                     <p class="text-gray-400 mb-6 leading-relaxed">
                         Currently at <span class="text-white font-semibold">Brady Company India</span>, I handle end-to-end store maintenance and feature enhancements for large-scale B2C and B2B platforms. I pride myself on delivering stable, scalable, and business-ready features in Agile environments.
                     </p>
-                    
                     <div class="bg-slate-800/50 p-6 rounded-2xl border border-gray-700 mt-8">
                         <div class="flex items-center gap-4 mb-4">
                             <div class="w-12 h-12 bg-magento/20 rounded-full flex items-center justify-center text-magento">
@@ -349,14 +385,11 @@
                     </div>
                 </div>
 
-                <!-- Skills Cloud -->
                 <div class="reveal delay-200">
                     <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
                         <i class="fas fa-code text-accent"></i> Technical Arsenal
                     </h3>
-                    
                     <div class="space-y-6">
-                        <!-- Magento Core -->
                         <div>
                             <p class="text-gray-400 text-sm mb-2">Core Competencies</p>
                             <div class="flex flex-wrap gap-2">
@@ -367,8 +400,6 @@
                                 <span class="px-4 py-2 rounded-lg bg-slate-800 border border-gray-700 hover:border-magento hover:text-magento transition-colors cursor-default">B2B & B2C</span>
                             </div>
                         </div>
-
-                        <!-- Frontend -->
                         <div>
                             <p class="text-gray-400 text-sm mb-2">Frontend & CMS</p>
                             <div class="flex flex-wrap gap-2">
@@ -379,22 +410,8 @@
                                 <span class="px-4 py-2 rounded-lg bg-slate-800 border border-gray-700 text-gray-300">Theme Customization</span>
                             </div>
                         </div>
-
-                        <!-- Tools -->
-                        <div>
-                            <p class="text-gray-400 text-sm mb-2">Tools & DevOps</p>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="px-4 py-2 rounded-lg bg-slate-800 border border-gray-700 text-gray-300"><i class="fab fa-git-alt mr-1"></i> Git</span>
-                                <span class="px-4 py-2 rounded-lg bg-slate-800 border border-gray-700 text-gray-300">Composer</span>
-                                <span class="px-4 py-2 rounded-lg bg-slate-800 border border-gray-700 text-gray-300">Magento CLI</span>
-                                <span class="px-4 py-2 rounded-lg bg-slate-800 border border-gray-700 text-gray-300">Linux (Ubuntu)</span>
-                                <span class="px-4 py-2 rounded-lg bg-slate-800 border border-gray-700 text-gray-300">Agile/Scrum</span>
-                            </div>
-                        </div>
                     </div>
-
-                    <!-- Interest Tags -->
-                     <div class="mt-8 pt-6 border-t border-gray-800">
+                    <div class="mt-8 pt-6 border-t border-gray-800">
                         <p class="text-gray-400 text-sm mb-3">Interests</p>
                         <div class="flex gap-4 text-gray-400 text-2xl">
                             <i class="fas fa-chess hover:text-white transition-colors" title="Chess"></i>
@@ -414,13 +431,9 @@
             <h2 class="font-display text-3xl md:text-4xl font-bold mb-12 text-center reveal">
                 Professional <span class="text-magento">Experience</span>
             </h2>
-
             <div class="relative border-l-2 border-gray-800 ml-3 md:ml-6 space-y-12">
-                
-                <!-- Experience Item 1 -->
                 <div class="relative pl-8 md:pl-12 reveal">
                     <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-magento ring-4 ring-slate-900"></div>
-                    
                     <div class="glass-card p-6 md:p-8 rounded-2xl hover:border-magento/30 transition-colors duration-300">
                         <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
                             <div>
@@ -429,120 +442,25 @@
                             </div>
                             <span class="text-gray-400 text-sm bg-slate-800 px-3 py-1 rounded-full mt-2 md:mt-0 w-fit">2025 - Present</span>
                         </div>
-                        
                         <p class="text-gray-300 mb-6">
                             Leading development for B2B & B2C platforms. Improving performance, scalability, and security while integrating complex REST APIs.
                         </p>
-
-                        <!-- Project Sub-Cards -->
                         <div class="grid md:grid-cols-2 gap-4">
                             <div class="bg-slate-800/50 p-4 rounded-xl border border-gray-700/50">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h4 class="font-bold text-white">pdchealthcare.com</h4>
-                                    <span class="text-xs font-bold text-magento bg-magento/10 px-2 py-0.5 rounded">B2C</span>
-                                </div>
+                                <h4 class="font-bold text-white">pdchealthcare.com</h4>
                                 <ul class="list-disc list-inside text-sm text-gray-400 space-y-1">
                                     <li>End-to-end store maintenance & feature enhancements.</li>
                                     <li>Integrated Payment Gateways & Shipping methods.</li>
-                                    <li>Customized themes for better UI/UX.</li>
                                 </ul>
                             </div>
-
                             <div class="bg-slate-800/50 p-4 rounded-xl border border-gray-700/50">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h4 class="font-bold text-white">bradywarehouse.com</h4>
-                                    <span class="text-xs font-bold text-accent bg-accent/10 px-2 py-0.5 rounded">B2B</span>
-                                </div>
+                                <h4 class="font-bold text-white">bradywarehouse.com</h4>
                                 <ul class="list-disc list-inside text-sm text-gray-400 space-y-1">
                                     <li>Implemented Company Accounts & Tier Pricing.</li>
                                     <li>Custom workflows for wholesale customers.</li>
-                                    <li>Managed Products, Customers, Pricing & Orders.</li>
                                 </ul>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                 <!-- Experience Item 2 -->
-                 <div class="relative pl-8 md:pl-12 reveal">
-                    <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-gray-600 ring-4 ring-slate-900"></div>
-                    
-                    <div class="glass-card p-6 md:p-8 rounded-2xl hover:border-gray-500 transition-colors duration-300">
-                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
-                            <div>
-                                <h3 class="text-xl font-bold text-white">Web Developer (WordPress)</h3>
-                                <div class="text-accent font-medium">Brady Company India Pvt. Ltd.</div>
-                            </div>
-                            <span class="text-gray-400 text-sm bg-slate-800 px-3 py-1 rounded-full mt-2 md:mt-0 w-fit">Previous Role</span>
-                        </div>
-                        
-                        <div class="space-y-4">
-                            <div>
-                                <h4 class="font-bold text-gray-200 text-sm uppercase tracking-wide mb-2">Projects: pdcorp.com & bradypeopleid.com</h4>
-                                <ul class="list-disc list-inside text-gray-400 space-y-2">
-                                    <li>Developed corporate websites implementing responsive UI changes using HTML, CSS, and JS.</li>
-                                    <li>Customized themes and plugins to improve site functionality.</li>
-                                    <li>Performed security updates and performance optimization.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects / Work Highlights Section -->
-    <section id="projects" class="py-20 bg-slate-900/50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="font-display text-3xl md:text-4xl font-bold mb-12 text-center reveal">
-                Key <span class="text-accent">Highlights</span>
-            </h2>
-
-            <div class="grid md:grid-cols-3 gap-6">
-                <!-- Card 1 -->
-                <div class="glass-card p-6 rounded-2xl group hover:-translate-y-2 transition-all duration-300 reveal">
-                    <div class="h-12 w-12 bg-magento/20 rounded-lg flex items-center justify-center text-magento mb-4 group-hover:bg-magento group-hover:text-white transition-colors">
-                        <i class="fas fa-shopping-cart text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-2">B2B Checkout Flow</h3>
-                    <p class="text-gray-400 text-sm mb-4">
-                        Customized Magento checkout for wholesale needs, integrating tier pricing logic and company credit payment methods.
-                    </p>
-                    <div class="flex gap-2">
-                        <span class="text-xs font-mono bg-slate-800 px-2 py-1 rounded text-gray-300">Magento 2</span>
-                        <span class="text-xs font-mono bg-slate-800 px-2 py-1 rounded text-gray-300">PHP</span>
-                    </div>
-                </div>
-
-                <!-- Card 2 -->
-                <div class="glass-card p-6 rounded-2xl group hover:-translate-y-2 transition-all duration-300 reveal delay-100">
-                    <div class="h-12 w-12 bg-accent/20 rounded-lg flex items-center justify-center text-accent mb-4 group-hover:bg-accent group-hover:text-white transition-colors">
-                        <i class="fas fa-plug text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-2">API Integration</h3>
-                    <p class="text-gray-400 text-sm mb-4">
-                        Developed and consumed REST APIs for third-party ERP systems, syncing inventory and orders in real-time.
-                    </p>
-                    <div class="flex gap-2">
-                        <span class="text-xs font-mono bg-slate-800 px-2 py-1 rounded text-gray-300">REST</span>
-                        <span class="text-xs font-mono bg-slate-800 px-2 py-1 rounded text-gray-300">JSON</span>
-                    </div>
-                </div>
-
-                <!-- Card 3 -->
-                <div class="glass-card p-6 rounded-2xl group hover:-translate-y-2 transition-all duration-300 reveal delay-200">
-                    <div class="h-12 w-12 bg-green-500/20 rounded-lg flex items-center justify-center text-green-500 mb-4 group-hover:bg-green-600 group-hover:text-white transition-colors">
-                        <i class="fas fa-tachometer-alt text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-2">Performance Opt.</h3>
-                    <p class="text-gray-400 text-sm mb-4">
-                        Optimized database queries and implemented full-page caching strategies, significantly reducing load times.
-                    </p>
-                    <div class="flex gap-2">
-                        <span class="text-xs font-mono bg-slate-800 px-2 py-1 rounded text-gray-300">MySQL</span>
-                        <span class="text-xs font-mono bg-slate-800 px-2 py-1 rounded text-gray-300">Varnish</span>
                     </div>
                 </div>
             </div>
@@ -597,40 +515,14 @@
                             <i class="fas fa-gamepad text-4xl"></i>
                         </div>
                         <h3 class="text-xl font-bold text-white mb-2">Select a game to start</h3>
-                        <p class="text-gray-500 max-w-xs mx-auto">Click any game button on the left to launch the interactive experience here.</p>
                     </div>
                     <div id="game-container" class="w-full hidden flex flex-col items-center">
                         <div class="flex justify-between items-center w-full mb-6">
                             <h3 id="game-title" class="text-2xl font-display font-bold text-white">Game</h3>
                             <div id="game-score-display" class="hidden px-4 py-1 rounded-full bg-slate-800 border border-gray-700 text-magento font-bold">Score: 0</div>
                         </div>
-                        <div id="game-viewport" class="w-full flex justify-center items-center">
-                            <!-- Dynamic Game Content Injected Here -->
-                        </div>
+                        <div id="game-viewport" class="w-full flex justify-center items-center"></div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Education Section -->
-    <section class="py-20 bg-slate-900 border-t border-gray-800">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
-            <h2 class="font-display text-2xl font-bold mb-8 text-white">Education & Certification</h2>
-            
-            <div class="flex flex-col md:flex-row justify-center gap-6">
-                <div class="bg-slate-800 p-6 rounded-xl flex-1 border border-gray-700 hover:border-magento/50 transition-colors">
-                    <i class="fas fa-graduation-cap text-3xl text-magento mb-3"></i>
-                    <h3 class="text-lg font-bold text-white">Bachelor of Civil Engineering</h3>
-                    <p class="text-gray-400 text-sm">Govt. Engineering College, West Champaran</p>
-                    <p class="text-gray-500 text-xs mt-1 italic">2020 - 2024</p>
-                </div>
-                
-                <div class="bg-slate-800 p-6 rounded-xl flex-1 border border-gray-700 hover:border-accent/50 transition-colors">
-                    <i class="fas fa-certificate text-3xl text-accent mb-3"></i>
-                    <h3 class="text-lg font-bold text-white">Full Stack Development</h3>
-                    <p class="text-gray-400 text-sm">Certification from JSpiders</p>
-                    <p class="text-gray-500 text-xs mt-1">Specialized in Java & Web Tech</p>
                 </div>
             </div>
         </div>
@@ -638,199 +530,175 @@
 
     <!-- Contact Section -->
     <section id="contact" class="py-20 relative overflow-hidden">
-        <!-- Decoration -->
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-magento/10 rounded-full blur-[100px] -z-10"></div>
-
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 class="font-display text-4xl font-bold mb-6 text-white reveal">Let's Work <span class="text-gradient">Together</span></h2>
-            <p class="text-gray-400 mb-10 text-lg reveal delay-100">
-                Currently looking for new opportunities. Whether you have a question about Magento, a project idea, or just want to say hi, my inbox is always open.
-            </p>
-
             <div class="grid sm:grid-cols-2 gap-4 mb-10 reveal delay-200">
-                <a href="mailto:rishu7478@gmail.com" class="bg-slate-800 border border-gray-700 p-4 rounded-xl flex items-center justify-center gap-3 hover:border-magento hover:bg-slate-800/50 transition-all group">
+                <a href="mailto:rishu7478@gmail.com" class="bg-slate-800 border border-gray-700 p-4 rounded-xl flex items-center justify-center gap-3 hover:border-magento transition-all group">
                     <i class="fas fa-envelope text-xl text-gray-400 group-hover:text-magento"></i>
-                    <span class="text-gray-300 group-hover:text-white truncate">rishu7478@gmail.com</span>
+                    <span class="text-gray-300">rishu7478@gmail.com</span>
                 </a>
-                <a href="tel:+917426033178" class="bg-slate-800 border border-gray-700 p-4 rounded-xl flex items-center justify-center gap-3 hover:border-accent hover:bg-slate-800/50 transition-all group">
+                <a href="tel:+917426033178" class="bg-slate-800 border border-gray-700 p-4 rounded-xl flex items-center justify-center gap-3 hover:border-accent transition-all group">
                     <i class="fas fa-phone text-xl text-gray-400 group-hover:text-accent"></i>
-                    <span class="text-gray-300 group-hover:text-white">+91 7426033178</span>
+                    <span class="text-gray-300">+91 7426033178</span>
                 </a>
-            </div>
-
-            <div class="reveal delay-300">
-                <a href="mailto:rishu7478@gmail.com" class="inline-block px-10 py-4 rounded-full bg-gradient-to-r from-magento to-orange-500 text-white font-bold text-lg hover:shadow-[0_0_20px_rgba(234,88,12,0.4)] transition-transform hover:-translate-y-1">
-                    Say Hello <i class="fas fa-paper-plane ml-2"></i>
-                </a>
-            </div>
-            
-            <div class="mt-12 flex justify-center gap-6 text-2xl text-gray-500 reveal delay-300">
-                <a href="https://github.com/Rishu7426" target="_blank" aria-label="GitHub" class="hover:text-white transition-colors"><i class="fab fa-github"></i></a>
-                <a href="https://linkedin.com/in/rishu-raj-072374191" target="_blank" aria-label="LinkedIn" class="hover:text-white transition-colors"><i class="fab fa-linkedin"></i></a>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
     <footer class="py-8 bg-black/20 text-center border-t border-gray-800">
-        <p class="text-gray-500 text-sm">
-            &copy; 2026 Rishu Raj. Built with <span class="text-magento">♥</span> and Magento Architecture in mind.
-        </p>
+        <p class="text-gray-500 text-sm">&copy; 2026 Rishu Raj.</p>
     </footer>
 
-    <!-- JavaScript Logic -->
     <script>
-        // Global Game Loop State
-        let gameLoopRef = null;
+        // --- GLOBAL SOUND SYSTEM ---
+        let audioCtx = null;
+        let paintOsc = null;
+        let paintGain = null;
 
-        // Use a single DOMContentLoaded listener for efficiency
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- 1. Typewriter Effect ---
-            const roles = ["Magento Developer", "PHP Developer", "Backend Engineer"];
-            let roleIndex = 0;
-            let charIndex = 0;
-            let isDeleting = false;
-            const typeWriterElement = document.getElementById('typewriter');
+        function initAudio() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
 
-            function typeWriter() {
-                if (!typeWriterElement) return;
-                
-                const currentRole = roles[roleIndex];
-                const typeSpeed = isDeleting ? 50 : 100;
-                
-                typeWriterElement.textContent = currentRole.substring(0, charIndex + (isDeleting ? -1 : 1));
-                charIndex = isDeleting ? charIndex - 1 : charIndex + 1;
+        function playSynthesizedSound(type) {
+            initAudio();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            const now = audioCtx.currentTime;
 
-                if (!isDeleting && charIndex === currentRole.length) {
-                    isDeleting = true;
-                    setTimeout(typeWriter, 2000);
-                } else if (isDeleting && charIndex === 0) {
-                    isDeleting = false;
-                    roleIndex = (roleIndex + 1) % roles.length;
-                    setTimeout(typeWriter, 500);
-                } else {
-                    setTimeout(typeWriter, typeSpeed);
+            if (type === 'cry') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(880, now);
+                osc.frequency.exponentialRampToValueAtTime(220, now + 0.3);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc.start(now); osc.stop(now + 0.3);
+            } else if (type === 'laugh') {
+                osc.type = 'sine';
+                for (let i = 0; i < 3; i++) {
+                    const t = now + (i * 0.15);
+                    osc.frequency.setValueAtTime(440, t);
+                    osc.frequency.exponentialRampToValueAtTime(660, t + 0.05);
+                    gain.gain.setValueAtTime(0.05, t);
+                    gain.gain.exponentialRampToValueAtTime(0.01, t + 0.1);
                 }
+                osc.start(now); osc.stop(now + 0.5);
             }
-            typeWriter();
+        }
 
-            // --- 2. Intersection Observer for Scroll Animations ---
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 });
-
-            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-            // --- 3. Navbar & Menu Logic ---
-            const btn = document.getElementById('mobile-menu-btn');
-            const menu = document.getElementById('mobile-menu');
-            const navbar = document.getElementById('navbar');
-
-            btn?.addEventListener('click', () => menu?.classList.toggle('hidden'));
+        function startPaintSound() {
+            initAudio();
+            paintOsc = audioCtx.createOscillator();
+            paintGain = audioCtx.createGain();
             
-            // Close menu when clicking a link
-            menu?.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    menu.classList.add('hidden');
-                });
-            });
+            // Soft "brush/pencil" sound using filtered noise or low sine waves
+            paintOsc.type = 'sine';
+            paintOsc.frequency.setValueAtTime(150, audioCtx.currentTime);
+            
+            // Add a bit of jitter for a "scratchy" feel
+            const lfo = audioCtx.createOscillator();
+            lfo.frequency.value = 25;
+            const lfoGain = audioCtx.createGain();
+            lfoGain.gain.value = 5;
+            lfo.connect(lfoGain);
+            lfoGain.connect(paintOsc.frequency);
+            lfo.start();
 
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    navbar.classList.add('shadow-lg', 'backdrop-blur-md');
-                    navbar.style.background = 'rgba(15, 23, 42, 0.95)';
-                } else {
-                    navbar.classList.remove('shadow-lg', 'backdrop-blur-md');
-                    navbar.style.background = 'rgba(15, 23, 42, 0.7)';
-                }
-            }, { passive: true });
+            paintGain.gain.value = 0;
+            paintOsc.connect(paintGain);
+            paintGain.connect(audioCtx.destination);
+            paintOsc.start();
+        }
+
+        function stopPaintSound() {
+            if (paintGain) {
+                paintGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.05);
+                setTimeout(() => {
+                    if (paintOsc) { paintOsc.stop(); paintOsc = null; }
+                }, 100);
+            }
+        }
+
+        function updatePaintSound(isActive) {
+            if (!paintGain) return;
+            paintGain.gain.setTargetAtTime(isActive ? 0.05 : 0, audioCtx.currentTime, 0.05);
+        }
+
+        // --- TYPEWRITER & REVEAL ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const roles = ["Magento Developer", "PHP Developer", "Backend Engineer"];
+            let roleIndex = 0, charIndex = 0, isDeleting = false;
+            const el = document.getElementById('typewriter');
+            function type() {
+                if (!el) return;
+                const curr = roles[roleIndex];
+                el.textContent = curr.substring(0, charIndex + (isDeleting ? -1 : 1));
+                charIndex += isDeleting ? -1 : 1;
+                if (!isDeleting && charIndex === curr.length) { isDeleting = true; setTimeout(type, 2000); }
+                else if (isDeleting && charIndex === 0) { isDeleting = false; roleIndex = (roleIndex+1)%roles.length; setTimeout(type, 500); }
+                else setTimeout(type, isDeleting ? 50 : 100);
+            }
+            type();
+            const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) { e.target.classList.add('active'); obs.unobserve(e.target); }}));
+            document.querySelectorAll('.reveal').forEach(x => obs.observe(x));
         });
 
-        // --- Games Logic ---
-        function loadGame(gameKey) {
+        // --- GAME SYSTEM ---
+        function loadGame(key) {
             const placeholder = document.getElementById('game-placeholder');
             const container = document.getElementById('game-container');
             const viewport = document.getElementById('game-viewport');
             const title = document.getElementById('game-title');
             const scoreDisplay = document.getElementById('game-score-display');
-
-            // Reset
-            if(gameLoopRef) clearInterval(gameLoopRef);
+            
             placeholder.classList.add('hidden');
             container.classList.remove('hidden');
             viewport.innerHTML = '';
             scoreDisplay.classList.add('hidden');
-            scoreDisplay.innerText = 'Score: 0';
 
-            switch(gameKey) {
+            switch(key) {
                 case 'calculator':
                     title.innerText = 'Calculator';
                     viewport.innerHTML = `
                         <div class="bg-slate-800 p-4 rounded-2xl border border-gray-700 w-64">
-                            <input type="text" id="calc-display" readonly class="w-full mb-4 p-2 bg-slate-900 border border-gray-700 text-right text-xl text-white rounded-lg">
+                            <input type="text" id="calc-display" readonly class="w-full mb-4 p-2 bg-slate-900 text-right text-xl text-white rounded-lg">
                             <div class="grid grid-cols-4 gap-2">
-                                ${['7','8','9','/','4','5','6','*','1','2','3','-','C','0','=','+'].map(btn => `
-                                    <button onclick="handleCalc('${btn}')" class="p-3 bg-slate-700 hover:bg-magento rounded-lg transition-colors font-bold">${btn}</button>
-                                `).join('')}
+                                ${['7','8','9','/','4','5','6','*','1','2','3','-','C','0','=','+'].map(b => `<button onclick="handleCalc('${b}')" class="p-3 bg-slate-700 hover:bg-magento rounded-lg transition-colors font-bold">${b}</button>`).join('')}
                             </div>
                         </div>
                     `;
+                    window.handleCalc = (v) => {
+                        const d = document.getElementById('calc-display');
+                        if(v === '=') { try { d.value = eval(d.value); } catch { d.value = 'Error'; } }
+                        else if(v === 'C') d.value = '';
+                        else d.value += v;
+                    };
                     break;
-
-                case 'tictactoe':
-                    title.innerText = 'Tic-Tac-Toe';
-                    viewport.innerHTML = `
-                        <div class="w-full max-w-[300px]">
-                            <div id="ttt-status" class="text-center text-sm font-bold text-gray-400 mb-4 uppercase tracking-widest">Your Turn (X)</div>
-                            <div class="grid grid-cols-3 gap-2" id="ttt-board">
-                                ${[...Array(9).keys()].map(i => `<div onclick="handleTTT(${i})" class="game-grid-cell" id="ttt-${i}"></div>`).join('')}
-                            </div>
-                            <div id="ttt-controls" class="mt-4 hidden text-center">
-                                <button onclick="loadGame('tictactoe')" class="px-4 py-2 bg-magento rounded-full font-bold text-sm">Play Again</button>
-                            </div>
-                        </div>
-                    `;
-                    window.tttState = Array(9).fill(null);
-                    window.tttTurn = 'X';
-                    window.tttActive = true;
-                    break;
-
                 case 'whack':
                     title.innerText = 'Whack the Bug';
                     scoreDisplay.classList.remove('hidden');
-                    viewport.innerHTML = `
-                        <div class="grid grid-cols-3 gap-4 w-full max-w-[300px]">
-                            ${[...Array(9).keys()].map(i => `
-                                <div class="aspect-square bg-slate-800 rounded-full border-b-4 border-slate-900 flex items-center justify-center relative overflow-hidden">
-                                    <div id="bug-${i}" onclick="hitBug(${i})" class="absolute bottom-[-100%] transition-all duration-100 cursor-pointer text-3xl">🪲</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    `;
+                    viewport.innerHTML = `<div class="grid grid-cols-3 gap-4 w-full max-w-[300px]">${[...Array(9).keys()].map(i => `<div class="aspect-square bg-slate-800 rounded-full border-b-4 border-slate-900 flex items-center justify-center relative overflow-hidden"><div id="bug-${i}" onclick="hitBug(${i})" class="absolute bottom-[-100%] transition-all duration-100 cursor-pointer text-3xl">🪲</div></div>`).join('')}</div>`;
                     let score = 0;
-                    gameLoopRef = setInterval(() => {
-                        const randomIdx = Math.floor(Math.random() * 9);
-                        const bug = document.getElementById(`bug-${randomIdx}`);
-                        if(bug) {
-                            bug.style.bottom = '20%';
-                            setTimeout(() => { if(bug) bug.style.bottom = '-100%'; }, 800);
+                    setInterval(() => {
+                        const idx = Math.floor(Math.random() * 9);
+                        const b = document.getElementById(`bug-${idx}`);
+                        if(b && !b.classList.contains('hit')) {
+                            b.style.bottom = '20%';
+                            setTimeout(() => { if(b.style.bottom === '20%' && !b.classList.contains('hit')) { b.style.bottom = '-100%'; playSynthesizedSound('laugh'); }}, 1000);
                         }
-                    }, 1000);
+                    }, 1500);
                     window.hitBug = (i) => {
-                        const bug = document.getElementById(`bug-${i}`);
-                        if(bug.style.bottom === '20%') {
-                            score++;
-                            scoreDisplay.innerText = `Score: ${score}`;
-                            bug.style.bottom = '-100%';
+                        const b = document.getElementById(`bug-${i}`);
+                        if(b.style.bottom === '20%' && !b.classList.contains('hit')) {
+                            b.classList.add('hit', 'bug-crying'); b.innerText = "😭";
+                            score++; scoreDisplay.innerText = `Score: ${score}`;
+                            playSynthesizedSound('cry');
+                            setTimeout(() => { b.style.bottom = '-100%'; b.classList.remove('hit', 'bug-crying'); b.innerText = "🪲"; }, 500);
                         }
                     };
                     break;
-
                 case 'paint':
                     title.innerText = 'Digital Paint';
                     viewport.innerHTML = `
@@ -840,148 +708,74 @@
                                     <div onclick="setPaintColor('#ea580c', this)" class="paint-swatch active bg-[#ea580c]"></div>
                                     <div onclick="setPaintColor('#38bdf8', this)" class="paint-swatch bg-[#38bdf8]"></div>
                                     <div onclick="setPaintColor('#22c55e', this)" class="paint-swatch bg-[#22c55e]"></div>
-                                    <div onclick="setPaintColor('#f1f5f9', this)" class="paint-swatch bg-[#f1f5f9]"></div>
+                                    <div class="color-picker-wrapper" title="Choose custom color">
+                                        <input type="color" id="customColorPicker" oninput="setPaintColor(this.value, this.parentElement)">
+                                    </div>
                                 </div>
                                 <div class="h-6 w-px bg-gray-700"></div>
                                 <input type="range" id="brush-size" min="2" max="20" value="5" class="w-20 accent-magento">
-                                <button onclick="clearPaint()" class="text-xs font-bold text-gray-400 hover:text-white transition-colors uppercase">Clear</button>
+                                <button onclick="clearPaint()" class="text-xs font-bold text-gray-400 hover:text-white uppercase">Clear</button>
                             </div>
                             <canvas id="paintCanvas" class="cursor-crosshair border border-gray-700 shadow-2xl"></canvas>
                         </div>
                     `;
                     initPaint();
                     break;
+                case 'tictactoe':
+                    title.innerText = 'Tic-Tac-Toe';
+                    viewport.innerHTML = `<div class="w-full max-w-[240px] grid grid-cols-3 gap-2">${[...Array(9).keys()].map(i => `<div onclick="handleTTT(${i})" id="ttt-${i}" class="game-grid-cell"></div>`).join('')}</div>`;
+                    let tttState = Array(9).fill(null);
+                    window.handleTTT = (i) => {
+                        if(tttState[i]) return;
+                        tttState[i] = 'X'; document.getElementById(`ttt-${i}`).innerText = 'X';
+                        const empty = tttState.map((v,k) => v===null?k:null).filter(v=>v!==null);
+                        if(empty.length > 0) { const ai = empty[Math.floor(Math.random()*empty.length)]; tttState[ai] = 'O'; document.getElementById(`ttt-${ai}`).innerText = 'O'; }
+                    };
+                    break;
             }
         }
 
-        // Calculator Handler
-        function handleCalc(val) {
-            const display = document.getElementById('calc-display');
-            if(val === '=') {
-                try { display.value = eval(display.value); } catch { display.value = 'Error'; }
-            } else if(val === 'C') {
-                display.value = '';
-            } else {
-                display.value += val;
-            }
-        }
-
-        // Tic Tac Toe Handler with AI
-        function handleTTT(i) {
-            if(!window.tttActive || window.tttState[i] || window.tttTurn !== 'X') return;
-            
-            makeTTTMove(i, 'X');
-            
-            if(window.tttActive) {
-                document.getElementById('ttt-status').innerText = "AI Thinking...";
-                setTimeout(makeAIMove, 600);
-            }
-        }
-
-        function makeTTTMove(i, player) {
-            window.tttState[i] = player;
-            const el = document.getElementById(`ttt-${i}`);
-            el.innerText = player;
-            el.style.color = player === 'X' ? '#ea580c' : '#38bdf8';
-            
-            const winner = checkTTTWinner();
-            if(winner) {
-                window.tttActive = false;
-                document.getElementById('ttt-status').innerText = winner === 'Draw' ? "It's a Draw!" : (winner === 'X' ? "You Win!" : "AI Wins!");
-                document.getElementById('ttt-status').classList.add(winner === 'X' ? 'text-green-500' : 'text-magento');
-                document.getElementById('ttt-controls').classList.remove('hidden');
-            } else {
-                window.tttTurn = player === 'X' ? 'O' : 'X';
-                document.getElementById('ttt-status').innerText = window.tttTurn === 'X' ? "Your Turn (X)" : "AI Thinking...";
-            }
-        }
-
-        function makeAIMove() {
-            if(!window.tttActive) return;
-            
-            const available = window.tttState.map((v, i) => v === null ? i : null).filter(v => v !== null);
-            if(available.length === 0) return;
-
-            // AI Logic
-            const winLines = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-            const findBestIdx = (p) => {
-                for(let line of winLines) {
-                    const vals = line.map(idx => window.tttState[idx]);
-                    if(vals.filter(v => v === p).length === 2 && vals.filter(v => v === null).length === 1) {
-                        return line[vals.indexOf(null)];
-                    }
-                }
-                return null;
-            };
-
-            let aiIdx = findBestIdx('O') ?? findBestIdx('X') ?? available[Math.floor(Math.random() * available.length)];
-            makeTTTMove(aiIdx, 'O');
-        }
-
-        function checkTTTWinner() {
-            const lines = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-            for(let [a,b,c] of lines) {
-                if(window.tttState[a] && window.tttState[a] === window.tttState[b] && window.tttState[a] === window.tttState[c]) return window.tttState[a];
-            }
-            return window.tttState.includes(null) ? null : 'Draw';
-        }
-
-        // Paint Logic
         function initPaint() {
             const canvas = document.getElementById('paintCanvas');
             const ctx = canvas.getContext('2d');
-            
-            // Set canvas size
             canvas.width = Math.min(window.innerWidth - 80, 500);
             canvas.height = 300;
-            
             let painting = false;
             let color = '#ea580c';
 
             window.setPaintColor = (c, el) => {
                 color = c;
-                document.querySelectorAll('.paint-swatch').forEach(s => s.classList.remove('active'));
+                document.querySelectorAll('.paint-swatch, .color-picker-wrapper').forEach(s => s.classList.remove('active'));
                 el.classList.add('active');
             };
 
-            window.clearPaint = () => {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            window.clearPaint = () => ctx.clearRect(0,0,canvas.width,canvas.height);
+
+            const start = (e) => { 
+                painting = true; 
+                startPaintSound();
+                updatePaintSound(true);
+                draw(e); 
             };
-
-            function startPosition(e) {
-                painting = true;
-                draw(e);
-            }
-
-            function finishedPosition() {
-                painting = false;
-                ctx.beginPath();
-            }
-
-            function draw(e) {
+            const stop = () => { 
+                painting = false; 
+                ctx.beginPath(); 
+                stopPaintSound();
+            };
+            const draw = (e) => {
                 if(!painting) return;
-                
-                const rect = canvas.getBoundingClientRect();
-                const x = (e.clientX || e.touches[0].clientX) - rect.left;
-                const y = (e.clientY || e.touches[0].clientY) - rect.top;
-                
+                const r = canvas.getBoundingClientRect();
+                const x = (e.clientX || e.touches?.[0].clientX) - r.left;
+                const y = (e.clientY || e.touches?.[0].clientY) - r.top;
                 ctx.lineWidth = document.getElementById('brush-size').value;
                 ctx.lineCap = 'round';
                 ctx.strokeStyle = color;
+                ctx.lineTo(x,y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x,y);
+            };
 
-                ctx.lineTo(x, y);
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.moveTo(x, y);
-            }
-
-            canvas.addEventListener('mousedown', startPosition);
-            canvas.addEventListener('mouseup', finishedPosition);
-            canvas.addEventListener('mousemove', draw);
-            
-            canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startPosition(e); });
-            canvas.addEventListener('touchend', finishedPosition);
-            canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); });
+            canvas.onmousedown = start; canvas.onmouseup = stop; canvas.onmousemove = draw;
+            canvas.ontouchstart = e => { e.preventDefault(); start(e); };
+            canvas.ontouchend = stop; canvas.ontouchmove = e => { e.preventDefault(); draw(e); };
         }
     </script>
 </body>
